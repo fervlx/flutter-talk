@@ -1,8 +1,10 @@
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 
 import 'package:pull_to_refresh/pull_to_refresh.dart';
 
-import 'package:talk/models/user_model.dart';
+import 'package:talk/models/user.dart';
+import 'package:talk/services/auth_service.dart';
 
 class UsersPage extends StatefulWidget {
   const UsersPage({Key key}) : super(key: key);
@@ -16,9 +18,9 @@ class _UsersPageState extends State<UsersPage> {
   RefreshController _refreshController = RefreshController(initialRefresh: false);
   
   List<User> users = [
-    User( uuid: '1', name: 'visenya', email: 'test1@test.com', online: true ),
-    User( uuid: '2', name: 'valerion', email: 'test2@test.com', online: false ),
-    User( uuid: '3', name: 'reghal', email: 'test3@test.com', online: false ),
+    User( uid: '1', name: 'visenya', email: 'test1@test.com', online: true ),
+    User( uid: '2', name: 'valerion', email: 'test2@test.com', online: false ),
+    User( uid: '3', name: 'reghal', email: 'test3@test.com', online: false ),
   ];
 
   void _onRefresh() async {
@@ -30,15 +32,23 @@ class _UsersPageState extends State<UsersPage> {
   @override
   Widget build(BuildContext context) {
 
+    final authService = Provider.of<AuthService>( context );
+
     return Scaffold(
+
       appBar: AppBar(
-        title: Text("Usuario", style: TextStyle( color: Colors.black87 )),
+        title: Text( authService.user.name, style: TextStyle( color: Colors.black87 )),
         centerTitle: true,
         backgroundColor: Colors.white,
         elevation: 1.0,
         leading: IconButton(
-          icon: Icon( Icons.arrow_back, color: Colors.black87 ), 
-          onPressed: () { }
+          icon: Icon( Icons.exit_to_app, color: Colors.black87 ), 
+          onPressed: () { 
+
+            Navigator.pushReplacementNamed( context, 'login' );
+            AuthService.deleteToken();
+
+          }
         ),
         actions: [
           Container(

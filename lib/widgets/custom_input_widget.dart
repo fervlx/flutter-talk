@@ -17,7 +17,7 @@ class CustomInputWidget extends StatelessWidget {
   }) : super(key: key);
 
   @override
-  Widget build(BuildContext context) {
+  Widget build( BuildContext context ) {
     
     return Container(
       padding: const EdgeInsets.only( left: 5.0, top: 5.0, bottom: 5.0, right: 20.0 ),
@@ -43,6 +43,7 @@ class CustomInputWidget extends StatelessWidget {
           border: InputBorder.none,
           hintText: this.placeholder
         ),
+        onSubmitted: ( _ ) => FocusScope.of( context ).unfocus(),
       ),
     );
   }

@@ -1,4 +1,7 @@
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
+import 'package:talk/helpers/login_alert.dart';
+import 'package:talk/services/auth_service.dart';
 
 import 'package:talk/widgets/logo_widget.dart';
 import 'package:talk/widgets/button_widget.dart';
@@ -11,7 +14,10 @@ class RegisterPage extends StatelessWidget {
   const RegisterPage({Key key}) : super(key: key);
 
   @override
-  Widget build(BuildContext context) {
+  Widget build( BuildContext context ) {
+
+
+
     return Scaffold(
       backgroundColor: Color( 0xffF2F2F2 ),
       body: SafeArea(
@@ -53,8 +59,30 @@ class __FormState extends State<_Form> {
   TextEditingController paswdCtrl = TextEditingController();
   TextEditingController nameCtrl  = TextEditingController();
 
+  void _onTapRegister( AuthService authService ) async {
+
+      bool status = await authService.register(
+        name: nameCtrl.text.trim(), 
+        email: emailCtrl.text.trim(), 
+        password: paswdCtrl.text.trim(),
+      );
+
+      if ( status ) {
+        Navigator.pushReplacementNamed( context, 'users' );
+      } else {
+        showLoginAlert( 
+          context: context, 
+          title: 'Registro incorrecto', 
+          content: 'El correo ya se encuentra registrado.'
+        );
+      }
+  }
+
   @override
-  Widget build(BuildContext context) {
+  Widget build( BuildContext context ) {
+
+    final authService = Provider.of<AuthService>( context );
+
     return Container(
       margin: const EdgeInsets.only( top: 20.0 ),
       padding: const EdgeInsets.symmetric( horizontal: 50.0 ),
@@ -83,10 +111,9 @@ class __FormState extends State<_Form> {
           SizedBox( height: 36.0 ),
           ButtonWidget(
             title: 'Crear',
-            onPressButton: () {
-              print( emailCtrl.text );
-              print( paswdCtrl.text );
-            }
+            onPressButton: !authService.isLoging
+            ? () => _onTapRegister( authService )
+            : null
           )
         ],
       ),
