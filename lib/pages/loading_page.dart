@@ -1,18 +1,22 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+
 import 'package:talk/pages/login_page.dart';
 import 'package:talk/pages/users_page.dart';
 import 'package:talk/services/auth_service.dart';
+import 'package:talk/services/socket_servide.dart';
+
 
 class LoadingPage extends StatelessWidget {
+  
   const LoadingPage({Key key}) : super(key: key);
 
   @override
-  Widget build(BuildContext context) {
+  Widget build( BuildContext context ) {
     
     return Scaffold(
       body: FutureBuilder(
-        future: _checkLogin(context),
+        future: _checkLogin( context ),
         builder: ( _, snapshot ){
           return Container(
             child: Center(
@@ -27,11 +31,14 @@ class LoadingPage extends StatelessWidget {
 
   Future _checkLogin( BuildContext context ) async {
 
-    final authService = Provider.of<AuthService>( context, listen: false );
+    final _authService   = Provider.of<AuthService>( context, listen: false );
+    final _socketService = Provider.of<SocketService>( context, listen: false );
 
-    bool loggedOk = await authService.isLoggedIn();
+    bool loggedOk = await _authService.isLoggedIn();
 
     if ( loggedOk ) {
+
+      _socketService.connect();
 
       Navigator.pushReplacement( context, 
         PageRouteBuilder(

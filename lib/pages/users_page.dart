@@ -5,6 +5,7 @@ import 'package:pull_to_refresh/pull_to_refresh.dart';
 
 import 'package:talk/models/user.dart';
 import 'package:talk/services/auth_service.dart';
+import 'package:talk/services/socket_servide.dart';
 
 class UsersPage extends StatefulWidget {
   const UsersPage({Key key}) : super(key: key);
@@ -32,19 +33,21 @@ class _UsersPageState extends State<UsersPage> {
   @override
   Widget build(BuildContext context) {
 
-    final authService = Provider.of<AuthService>( context );
-
+    final _authService    = Provider.of<AuthService>( context );
+    final _socketService  = Provider.of<SocketService>( context );
+    
     return Scaffold(
 
       appBar: AppBar(
-        title: Text( authService.user.name, style: TextStyle( color: Colors.black87 )),
+        title: Text( _authService.user.name, style: TextStyle( color: Colors.black87 )),
         centerTitle: true,
         backgroundColor: Colors.white,
         elevation: 1.0,
         leading: IconButton(
           icon: Icon( Icons.exit_to_app, color: Colors.black87 ), 
-          onPressed: () { 
+          onPressed: () {
 
+            _socketService.disconnect();
             Navigator.pushReplacementNamed( context, 'login' );
             AuthService.deleteToken();
 

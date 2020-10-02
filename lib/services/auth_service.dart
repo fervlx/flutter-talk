@@ -51,7 +51,7 @@ class AuthService with ChangeNotifier {
 
     try {
     
-      final response = await http.post("${Environment.apiUrl}/login", 
+      final response = await http.post("${Environment.apiUrl}/login/", 
         body: jsonEncode( data ) , 
         headers: headers 
       );
@@ -62,6 +62,8 @@ class AuthService with ChangeNotifier {
         this._user = loginResponse.user;
         
         await this._saveToken( loginResponse.token );
+        _setIsLoging( false );
+        
         return true;
       
       } else {
@@ -128,9 +130,11 @@ class AuthService with ChangeNotifier {
 
     try {
 
-      String token = await _storage.read(key: 'jwtoken');
+      String token = await _storage.read( key: 'jwtoken' );
       
-      print( token );
+      if ( token == null ) {
+        return false;
+      }
 
       final headers = {
         'Content-Type': 'application/json',

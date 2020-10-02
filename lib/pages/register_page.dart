@@ -1,7 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+
 import 'package:talk/helpers/login_alert.dart';
 import 'package:talk/services/auth_service.dart';
+import 'package:talk/services/socket_servide.dart';
 
 import 'package:talk/widgets/logo_widget.dart';
 import 'package:talk/widgets/button_widget.dart';
@@ -11,6 +13,7 @@ import 'package:talk/widgets/account_label_widget.dart';
 
 
 class RegisterPage extends StatelessWidget {
+
   const RegisterPage({Key key}) : super(key: key);
 
   @override
@@ -59,7 +62,7 @@ class __FormState extends State<_Form> {
   TextEditingController paswdCtrl = TextEditingController();
   TextEditingController nameCtrl  = TextEditingController();
 
-  void _onTapRegister( AuthService authService ) async {
+  void _onTapRegister( AuthService authService, SocketService socketService ) async {
 
       bool status = await authService.register(
         name: nameCtrl.text.trim(), 
@@ -68,6 +71,7 @@ class __FormState extends State<_Form> {
       );
 
       if ( status ) {
+        socketService.connect();
         Navigator.pushReplacementNamed( context, 'users' );
       } else {
         showLoginAlert( 
@@ -81,8 +85,9 @@ class __FormState extends State<_Form> {
   @override
   Widget build( BuildContext context ) {
 
-    final authService = Provider.of<AuthService>( context );
-
+    final _authService    = Provider.of<AuthService>( context );
+    final _socketService = Provider.of<SocketService>( context );
+    
     return Container(
       margin: const EdgeInsets.only( top: 20.0 ),
       padding: const EdgeInsets.symmetric( horizontal: 50.0 ),
@@ -111,8 +116,8 @@ class __FormState extends State<_Form> {
           SizedBox( height: 36.0 ),
           ButtonWidget(
             title: 'Crear',
-            onPressButton: !authService.isLoging
-            ? () => _onTapRegister( authService )
+            onPressButton: !_authService.isLoging
+            ? () => _onTapRegister( _authService, _socketService )
             : null
           )
         ],

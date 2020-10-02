@@ -4,6 +4,7 @@ import 'package:provider/provider.dart';
 
 import 'package:talk/routes/app_routes.dart';
 import 'package:talk/services/auth_service.dart';
+import 'package:talk/services/socket_servide.dart';
 
 
 void main() {
@@ -16,7 +17,8 @@ class MyApp extends StatelessWidget {
   Widget build(BuildContext context) {
     return MultiProvider(
       providers: [
-        ChangeNotifierProvider( create: ( _ ) => AuthService() ),
+        ChangeNotifierProvider( create: ( _ ) => AuthService()),
+        ChangeNotifierProvider( create: ( _ ) => SocketService()),
       ],
       child: MaterialApp(
         debugShowCheckedModeBanner: false,

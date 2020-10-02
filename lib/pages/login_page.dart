@@ -1,10 +1,13 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+
+
 import 'package:talk/helpers/login_alert.dart';
+import 'package:talk/services/auth_service.dart';
+import 'package:talk/services/socket_servide.dart';
 
 
 import 'package:talk/widgets/logo_widget.dart';
-import 'package:talk/services/auth_service.dart';
 import 'package:talk/widgets/button_widget.dart';
 import 'package:talk/widgets/politics_widget.dart';
 import 'package:talk/widgets/custom_input_widget.dart';
@@ -57,11 +60,12 @@ class __FormState extends State<_Form> {
   TextEditingController emailCtrl = TextEditingController();
   TextEditingController paswdCtrl = TextEditingController();
 
-  void _onTapLogin( AuthService provider ) async {
+  void _onTapLogin( AuthService provider, SocketService socket ) async {
     
     final status = await provider.login( email: emailCtrl.text.trim(), password: paswdCtrl.text.trim() );
 
     if ( status ) {
+      socket.connect();
       Navigator.pushReplacementNamed( context, 'users' );
     } else {
       showLoginAlert( 
@@ -76,6 +80,7 @@ class __FormState extends State<_Form> {
   Widget build( BuildContext context ) {
     
     final _provider = Provider.of<AuthService>( context );
+    final _socket   = Provider.of<SocketService>( context );
 
     return Container(
       margin: const EdgeInsets.only( top: 20.0 ),
@@ -99,7 +104,7 @@ class __FormState extends State<_Form> {
           ButtonWidget(
             title: 'Ingrese',
             onPressButton: !_provider.isLoging 
-              ? () => _onTapLogin ( _provider )
+              ? () => _onTapLogin ( _provider, _socket )
               : null
           )
         ],
