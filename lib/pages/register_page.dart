@@ -3,7 +3,7 @@ import 'package:provider/provider.dart';
 
 import 'package:talk/helpers/login_alert.dart';
 import 'package:talk/services/auth_service.dart';
-import 'package:talk/services/socket_servide.dart';
+import 'package:talk/services/socket_service.dart';
 
 import 'package:talk/widgets/logo_widget.dart';
 import 'package:talk/widgets/button_widget.dart';

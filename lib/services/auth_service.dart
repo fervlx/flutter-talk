@@ -60,7 +60,7 @@ class AuthService with ChangeNotifier {
         
         final loginResponse = loginResponseFromJson( response.body );
         this._user = loginResponse.user;
-        
+        print( loginResponse.token );
         await this._saveToken( loginResponse.token );
         _setIsLoging( false );
         

@@ -5,7 +5,7 @@ import 'package:pull_to_refresh/pull_to_refresh.dart';
 
 import 'package:talk/models/user.dart';
 import 'package:talk/services/auth_service.dart';
-import 'package:talk/services/socket_servide.dart';
+import 'package:talk/services/socket_service.dart';
 
 class UsersPage extends StatefulWidget {
   const UsersPage({Key key}) : super(key: key);
@@ -56,8 +56,9 @@ class _UsersPageState extends State<UsersPage> {
         actions: [
           Container(
             padding: const EdgeInsets.only( right: 10.0 ),
-            child:  Icon( Icons.offline_bolt, color: Colors.red ),
-            //child: Icon( Icons.check_circle, color: Colors.green ),
+            child:  _socketService.serverStatus == ServerStatus.Online
+             ? Icon( Icons.check_circle, color: Colors.green )
+             : Icon( Icons.offline_bolt, color: Colors.red ),
           )
         ],
       ),

@@ -4,7 +4,7 @@ import 'package:provider/provider.dart';
 import 'package:talk/pages/login_page.dart';
 import 'package:talk/pages/users_page.dart';
 import 'package:talk/services/auth_service.dart';
-import 'package:talk/services/socket_servide.dart';
+import 'package:talk/services/socket_service.dart';
 
 
 class LoadingPage extends StatelessWidget {

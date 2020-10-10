@@ -4,7 +4,7 @@ import 'package:provider/provider.dart';
 
 import 'package:talk/routes/app_routes.dart';
 import 'package:talk/services/auth_service.dart';
-import 'package:talk/services/socket_servide.dart';
+import 'package:talk/services/socket_service.dart';
 
 
 void main() {
